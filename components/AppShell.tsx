@@ -38,6 +38,11 @@ const navGroups: { title: string; items: { href: string; label: string }[] }[] =
 
 export default function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+  const isLogin = pathname === "/login";
+
+  if (isLogin) {
+    return <main className="min-h-screen">{children}</main>;
+  }
 
   return (
     <div className="min-h-screen lg:flex lg:flex-col">
