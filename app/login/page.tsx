@@ -43,7 +43,6 @@ export default function LoginPage() {
         <div className="mb-5 flex flex-col items-center gap-2 text-center">
           <Image src="/logo.png" alt="Continental Holdings" width={120} height={72} className="h-auto w-24 object-contain" priority />
           <h1 className="text-lg font-bold tracking-tight text-blue-950">Sign in</h1>
-          <p className="text-xs text-slate-600">Use any username and password to continue.</p>
         </div>
 
         <form onSubmit={onSubmit} className="space-y-3">
