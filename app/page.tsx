@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
+import OverviewPage from "@/components/pages/OverviewPage";
 
 export default function Home() {
-  redirect("/login");
+  return <OverviewPage />;
 }
