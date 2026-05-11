@@ -4,7 +4,7 @@ import React from "react";
 import { DataToolbar } from "@/components/DataToolbar";
 import { Modal } from "@/components/Modal";
 import { useToast } from "@/components/ToastProvider";
-import { downloadBrandedPdfDocument } from "@/lib/documents";
+import { downloadReportCataloguePdf, downloadReportOutputPdf } from "@/lib/documents";
 
 const reports = [
   { name: "Member balances", module: "Pension / PW / Voluntary", format: "PDF · Excel · CSV" },
@@ -60,7 +60,7 @@ export default function ReportsPage() {
                   type="button"
                   className="cps-btn shrink-0 whitespace-nowrap text-[11px]"
                   onClick={async () => {
-                    await downloadBrandedPdfDocument("Report catalogue snapshot", rows.map((r) => `- ${r.name} (${r.module})`).slice(0, 12));
+                    await downloadReportCataloguePdf(rows.slice(0, 24));
                     pushToast("Catalogue snapshot downloaded.", "success");
                   }}
                 >
@@ -122,12 +122,13 @@ export default function ReportsPage() {
                             });
                             const j = (await res.json()) as { status?: number; jobId?: string; message?: string };
                             if (j?.status === 1) {
-                              await downloadBrandedPdfDocument(`Report output ${r.name}`, [
-                                `Job: ${j.jobId ?? "—"}`,
-                                j.message ?? "",
-                                "",
-                                "Parameters: last closed month · all schemes · MK.",
-                              ]);
+                              await downloadReportOutputPdf({
+                                reportName: r.name,
+                                module: r.module,
+                                jobId: j.jobId ?? "—",
+                                message: j.message ?? "Queued",
+                                parameters: "Last closed month · all schemes · MK · authorization status included",
+                              });
                               pushToast(j.message ?? "Report queued.", "success");
                             } else pushToast("Report request failed.", "error");
                           } catch {

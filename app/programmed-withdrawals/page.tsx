@@ -92,8 +92,8 @@ export default function ProgrammedWithdrawalsPage() {
                 <th>Pensioner</th>
                 <th>District</th>
                 <th>Plan</th>
-                <th className="text-right">Fund balance</th>
-                <th className="text-right">Installment</th>
+                <th className="text-right">Fund balance (MK)</th>
+                <th className="text-right">Installment (MK)</th>
                 <th>Next due</th>
                 <th className="w-36 text-right">Actions</th>
               </tr>
@@ -101,8 +101,10 @@ export default function ProgrammedWithdrawalsPage() {
             <tbody>
               {rows.map((m) => (
                 <tr key={m.id}>
-                  <td className="font-semibold text-ink">
-                    {m.firstName} {m.lastName}
+                  <td>
+                    <Link href={`/programmed-withdrawals/${m.id}`} className="font-semibold text-ink hover:text-cps-800 hover:underline">
+                      {m.firstName} {m.lastName}
+                    </Link>
                   </td>
                   <td className="text-slate-700">{m.district}</td>
                   <td className="text-slate-800">{m.planType}</td>
@@ -112,7 +114,7 @@ export default function ProgrammedWithdrawalsPage() {
                   <td className="text-right">
                     <div className="flex justify-end gap-1">
                       <Link href={`/programmed-withdrawals/${m.id}`} className="cps-btn py-1 text-[11px]">
-                        Pay run
+                        Open
                       </Link>
                       <button
                         type="button"

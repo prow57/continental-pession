@@ -6,7 +6,7 @@ import { dummyMembers, dummyPayments, type PensionPayment } from "@/data";
 import { DataToolbar } from "@/components/DataToolbar";
 import { Modal } from "@/components/Modal";
 import { useToast } from "@/components/ToastProvider";
-import { downloadBrandedPdfDocument, downloadTableCsv } from "@/lib/documents";
+import { downloadMemberLetterPdf, downloadPaymentVoucherPdf, downloadTableCsv } from "@/lib/documents";
 import { formatMk } from "@/lib/format";
 
 function memberName(id: string): string {
@@ -116,7 +116,7 @@ export default function PaymentsPage() {
                 <th>Date</th>
                 <th>Type</th>
                 <th>Description</th>
-                <th className="text-right">Amount</th>
+                <th className="text-right">Amount (MK)</th>
                 <th>Auth</th>
                 <th className="w-52 text-right">Actions</th>
               </tr>
@@ -129,7 +129,7 @@ export default function PaymentsPage() {
                   <td className="tabular-nums text-slate-700">{p.date}</td>
                   <td className="text-slate-800">{p.type}</td>
                   <td className="text-slate-600">{p.description}</td>
-                  <td className="text-right font-semibold tabular-nums text-cps-950">{formatMk(p.amountMk)}</td>
+                  <td className="text-right font-semibold tabular-nums text-cps-950">{p.amountMk.toLocaleString("en-MW")}</td>
                   <td className="text-[11px] font-semibold text-slate-700">{p.authStatus}</td>
                   <td className="text-right">
                     <div className="flex flex-wrap justify-end gap-1">
@@ -140,14 +140,14 @@ export default function PaymentsPage() {
                         type="button"
                         className="cps-btn py-1 text-[11px]"
                         onClick={async () => {
-                          await downloadBrandedPdfDocument(`Payment voucher ${p.reference}`, [
-                            `Payee: ${memberName(p.memberId)}`,
-                            `Amount: ${formatMk(p.amountMk)}`,
-                            `Type: ${p.type}`,
-                            `Status: ${p.authStatus}`,
-                            "",
-                            "Signatory blocks and cheque details appear on the printed voucher.",
-                          ]);
+                          await downloadPaymentVoucherPdf({
+                            reference: p.reference,
+                            payee: memberName(p.memberId),
+                            amountMk: p.amountMk,
+                            paymentType: p.type,
+                            status: p.authStatus,
+                            dateLabel: p.date,
+                          });
                           pushToast(`Voucher downloaded for ${p.reference}.`, "success");
                         }}
                       >
@@ -157,13 +157,12 @@ export default function PaymentsPage() {
                         type="button"
                         className="cps-btn py-1 text-[11px]"
                         onClick={async () => {
-                          await downloadBrandedPdfDocument(`Member letter ${p.reference}`, [
-                            `Dear ${memberName(p.memberId)},`,
-                            "",
-                            `Re: ${p.type} — reference ${p.reference}`,
-                            "",
-                            "This letter confirms the benefit instruction captured in CPS. Banking details on file will be used for settlement.",
-                          ]);
+                          await downloadMemberLetterPdf({
+                            reference: p.reference,
+                            memberName: memberName(p.memberId),
+                            paymentType: p.type,
+                            amountMk: p.amountMk,
+                          });
                           pushToast(`Letter downloaded for ${p.reference}.`, "success");
                         }}
                       >

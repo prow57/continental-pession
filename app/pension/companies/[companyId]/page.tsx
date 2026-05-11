@@ -26,7 +26,7 @@ export default async function CompanyDetailPage({ params }: Props) {
 
   return (
     <div className="space-y-3">
-      <BackLink href="/pension">Employer schemes</BackLink>
+      <BackLink href="/pension/employer-schemes">Employer schemes</BackLink>
       <div>
         <h1 className="text-lg font-bold tracking-tight text-cps-950">{company.name}</h1>
         <p className="text-xs text-slate-600">
@@ -62,7 +62,7 @@ export default async function CompanyDetailPage({ params }: Props) {
               <tr>
                 <th>Member</th>
                 <th>District</th>
-                <th className="text-right">Balance</th>
+                <th className="text-right">Balance (MK)</th>
                 <th className="w-28 text-right">Actions</th>
               </tr>
             </thead>

@@ -6,7 +6,7 @@ import { dummyVoluntary } from "@/data";
 import { DataToolbar } from "@/components/DataToolbar";
 import { Modal } from "@/components/Modal";
 import { useToast } from "@/components/ToastProvider";
-import { downloadBrandedPdfDocument, downloadTableCsv } from "@/lib/documents";
+import { downloadTableCsv, downloadVoluntaryStatementPdf } from "@/lib/documents";
 import { formatMk } from "@/lib/format";
 
 export default function VoluntaryPage() {
@@ -91,9 +91,9 @@ export default function VoluntaryPage() {
               <tr>
                 <th>Member</th>
                 <th>District</th>
-                <th className="text-right">Pension (60%)</th>
-                <th className="text-right">Personal (40%)</th>
-                <th className="text-right">Total</th>
+                <th className="text-right">Pension (60%) (MK)</th>
+                <th className="text-right">Personal (40%) (MK)</th>
+                <th className="text-right">Total (MK)</th>
                 <th>Last contribution</th>
                 <th className="w-32 text-right">Actions</th>
               </tr>
@@ -119,15 +119,14 @@ export default function VoluntaryPage() {
                         <button
                           type="button"
                           className="cps-btn py-1 text-[11px]"
-                          onClick={async () => {
-                            await downloadBrandedPdfDocument(`Voluntary statement ${v.id}`, [
-                              `${v.firstName} ${v.lastName} · ${v.district}`,
-                              `Pension (60%): ${formatMk(v.pensionPortionMk)}`,
-                              `Personal (40%): ${formatMk(v.personalSavingsMk)}`,
-                              `Total: ${formatMk(total)}`,
-                              "",
-                              "Further movement lines appear on subsequent pages of the statement.",
-                            ]);
+                        onClick={async () => {
+                            await downloadVoluntaryStatementPdf({
+                              statementId: v.id,
+                              memberName: `${v.firstName} ${v.lastName}`,
+                              district: v.district,
+                              pensionPortionMk: v.pensionPortionMk,
+                              personalSavingsMk: v.personalSavingsMk,
+                            });
                             pushToast(`Statement saved for ${v.id}.`, "success");
                           }}
                         >

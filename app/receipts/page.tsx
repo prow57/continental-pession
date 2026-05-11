@@ -119,7 +119,7 @@ export default function ReceiptsPage() {
                 <th>Member</th>
                 <th>Date</th>
                 <th>Description</th>
-                <th className="text-right">Amount</th>
+                <th className="text-right">Amount (MK)</th>
                 <th>Auth</th>
                 <th className="w-40 text-right">Actions</th>
               </tr>

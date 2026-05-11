@@ -29,7 +29,7 @@ export default async function MemberDetailPage({ params, searchParams }: Props) 
 
   return (
     <div className="space-y-3">
-      <BackLink href="/pension">Member register</BackLink>
+      <BackLink href="/pension/members">Member register</BackLink>
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
           <h1 className="text-lg font-bold tracking-tight text-cps-950">

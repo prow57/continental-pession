@@ -56,7 +56,7 @@ export default function FinancePostingQueuePage() {
                   <th>Batch</th>
                   <th>Module</th>
                   <th className="text-right">Lines</th>
-                  <th className="text-right">Amount</th>
+                  <th className="text-right">Amount (MK)</th>
                   <th>Status</th>
                   <th>Captured</th>
                   <th className="w-44 text-right">Actions</th>
