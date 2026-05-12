@@ -62,7 +62,9 @@ export default function PensionEmployerSchemesPage() {
                         id: c.id,
                         name: c.name,
                         scheme: c.scheme,
+                        industry: c.industrySector ?? "",
                         district: c.district,
+                        registrationNo: c.registrationNo ?? "",
                         memberCount: c.memberCount,
                         monthlyContributionMk: c.monthlyContributionMk,
                       })),
@@ -70,7 +72,9 @@ export default function PensionEmployerSchemesPage() {
                         { key: "id", header: "ID" },
                         { key: "name", header: "Company" },
                         { key: "scheme", header: "Scheme" },
+                        { key: "industry", header: "Industry" },
                         { key: "district", header: "District" },
+                        { key: "registrationNo", header: "CPS Reg" },
                         { key: "memberCount", header: "Members" },
                         { key: "monthlyContributionMk", header: "Monthly MK" },
                       ],
@@ -90,11 +94,12 @@ export default function PensionEmployerSchemesPage() {
       </div>
 
       <div className="cps-table-wrap">
-        <table className="cps-table min-w-[640px]">
+        <table className="cps-table min-w-[860px]">
           <thead>
             <tr>
               <th>Company</th>
               <th>Type</th>
+              <th>Industry</th>
               <th>District</th>
               <th className="text-right">Members</th>
               <th className="text-right">Est. monthly receipts (MK)</th>
@@ -104,12 +109,18 @@ export default function PensionEmployerSchemesPage() {
           <tbody>
             {companies.map((c) => (
               <tr key={c.id}>
-                <td className="font-semibold text-ink">{c.name}</td>
+                <td>
+                  <div className="font-semibold text-ink">{c.name}</div>
+                  {c.registrationNo ? (
+                    <div className="text-[10px] font-mono text-slate-500">{c.registrationNo}</div>
+                  ) : null}
+                </td>
                 <td>
                   <Badge tone={c.scheme === "restricted" ? "muted" : "ok"}>
                     {c.scheme === "restricted" ? "Restricted" : "Unrestricted"}
                   </Badge>
                 </td>
+                <td className="max-w-[220px] text-[11px] leading-snug text-slate-700">{c.industrySector ?? "—"}</td>
                 <td className="text-slate-700">{c.district}</td>
                 <td className="text-right tabular-nums text-slate-800">{c.memberCount.toLocaleString()}</td>
                 <td className="text-right font-semibold tabular-nums text-cps-900">{formatMk(c.monthlyContributionMk)}</td>

@@ -34,10 +34,12 @@ export default function ProgrammedWithdrawalsPage() {
     <div className="space-y-3">
       <div>
         <h1 className="text-lg font-bold tracking-tight text-cps-950">Withdrawals</h1>
-        <p className="text-xs text-slate-600">Programmed withdrawal (PW) members — installments, balances, and next due dates.</p>
+        <p className="text-xs text-slate-600">
+          Programmed withdrawal (PW) members — installments, tax withholding, bank mandates, and next due dates (demo data).
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
         <div className="cps-stat-tile">
           <div className="text-[10px] font-bold uppercase tracking-wide text-cps-800">Active PW members</div>
           <div className="mt-0.5 text-xl font-bold text-ink">{dummyPwMembers.length}</div>
@@ -52,6 +54,12 @@ export default function ProgrammedWithdrawalsPage() {
           <div className="text-[10px] font-bold uppercase tracking-wide text-cps-800">Monthly outflow</div>
           <div className="mt-0.5 text-xl font-bold text-ink">
             {formatMk(dummyPwMembers.reduce((a, m) => a + m.monthlyInstallmentMk, 0))}
+          </div>
+        </div>
+        <div className="cps-stat-tile">
+          <div className="text-[10px] font-bold uppercase tracking-wide text-cps-800">Cumulative paid (demo)</div>
+          <div className="mt-0.5 text-xl font-bold text-ink">
+            {formatMk(dummyPwMembers.reduce((a, m) => a + (m.cumPaidMk ?? 0), 0))}
           </div>
         </div>
       </div>
@@ -86,14 +94,17 @@ export default function ProgrammedWithdrawalsPage() {
           </div>
         </div>
         <div className="cps-table-wrap">
-          <table className="cps-table min-w-[760px]">
+          <table className="cps-table min-w-[1040px]">
             <thead>
               <tr>
                 <th>Pensioner</th>
+                <th>Ref</th>
                 <th>District</th>
                 <th>Plan</th>
                 <th className="text-right">Fund balance (MK)</th>
                 <th className="text-right">Installment (MK)</th>
+                <th className="text-right">Tax %</th>
+                <th className="text-right">Paid to date (MK)</th>
                 <th>Next due</th>
                 <th className="w-36 text-right">Actions</th>
               </tr>
@@ -106,10 +117,13 @@ export default function ProgrammedWithdrawalsPage() {
                       {m.firstName} {m.lastName}
                     </Link>
                   </td>
+                  <td className="font-mono text-[11px] text-slate-600">{m.schemeMemberRef ?? "—"}</td>
                   <td className="text-slate-700">{m.district}</td>
                   <td className="text-slate-800">{m.planType}</td>
                   <td className="text-right font-semibold tabular-nums text-cps-950">{formatMk(m.fundBalanceMk)}</td>
                   <td className="text-right tabular-nums text-slate-800">{formatMk(m.monthlyInstallmentMk)}</td>
+                  <td className="text-right tabular-nums text-slate-700">{m.taxWithheldPct ?? "—"}</td>
+                  <td className="text-right tabular-nums text-slate-800">{m.cumPaidMk != null ? formatMk(m.cumPaidMk) : "—"}</td>
                   <td className="tabular-nums text-slate-700">{formatDate(m.nextDueDate)}</td>
                   <td className="text-right">
                     <div className="flex justify-end gap-1">

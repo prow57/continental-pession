@@ -13,6 +13,12 @@ export interface Company {
   district: string;
   memberCount: number;
   monthlyContributionMk: number;
+  /** Employer / scheme administration (demo) */
+  industrySector?: string;
+  registrationNo?: string;
+  payrollContactEmail?: string;
+  trusteeSummary?: string;
+  establishedYear?: number;
 }
 
 export interface PensionMember {
@@ -21,11 +27,42 @@ export interface PensionMember {
   lastName: string;
   companyId: string | null;
   district: string;
-  gender: "Male" | "Female" | "Other";
+  gender: "Male" | "Female";
   dateJoined: string;
   balanceMk: number;
   status: MemberStatus;
   kycComplete: boolean;
+}
+
+/** KYC / contact overlay for member profile screens (demo). */
+export interface MemberProfileExtra {
+  dateOfBirth: string;
+  phone: string;
+  email: string;
+  nationalIdMasked: string;
+  beneficiaryName: string;
+  bankNameMasked: string;
+  jobTitle: string;
+  internalNotes: string;
+}
+
+export interface FinanceLiquidityLine {
+  label: string;
+  institution: string;
+  balanceMk: number;
+  asOf: string;
+}
+
+export interface FinancePipelineStat {
+  stage: string;
+  count: number;
+  amountMk: number;
+}
+
+export interface SchemeConcentrationRow {
+  scheme: string;
+  receiptsLast90dMk: number;
+  pctOfInflows: number;
 }
 
 export interface FundReceipt {
@@ -58,6 +95,13 @@ export interface PWMember {
   fundBalanceMk: number;
   monthlyInstallmentMk: number;
   nextDueDate: string;
+  commencementDate?: string;
+  schemeMemberRef?: string;
+  taxWithheldPct?: number;
+  cumPaidMk?: number;
+  bankMasked?: string;
+  actuaryRiskBand?: "Low" | "Standard" | "Elevated";
+  lastReviewDate?: string;
 }
 
 export interface VoluntaryMember {
@@ -86,6 +130,11 @@ export const dummyCompanies: Company[] = [
     district: "Blantyre",
     memberCount: 842,
     monthlyContributionMk: 48_500_000,
+    industrySector: "Conglomerate — manufacturing, retail & logistics",
+    registrationNo: "CPS-REG-PCL-2011-0842",
+    payrollContactEmail: "group.payroll@presscorp.mw",
+    trusteeSummary: "Employer trustee sub-committee (4) · quarterly scheme reviews with CPS",
+    establishedYear: 1996,
   },
   {
     id: "co-2",
@@ -94,6 +143,11 @@ export const dummyCompanies: Company[] = [
     district: "Blantyre",
     memberCount: 612,
     monthlyContributionMk: 36_200_000,
+    industrySector: "Financial services — banking",
+    registrationNo: "CPS-REG-NBM-2008-0311",
+    payrollContactEmail: "hr.operations@nbm.mw",
+    trusteeSummary: "HR & risk co-chairs · monthly contribution reconciliation to CPS",
+    establishedYear: 1964,
   },
   {
     id: "co-3",
@@ -102,6 +156,11 @@ export const dummyCompanies: Company[] = [
     district: "Dowa",
     memberCount: 198,
     monthlyContributionMk: 9_850_000,
+    industrySector: "Agro-processing — ethanol & co-products",
+    registrationNo: "CPS-REG-ECM-2015-1204",
+    payrollContactEmail: "people@ethanolmw.mw",
+    trusteeSummary: "Single employer trustee with CPS delegated compliance checks",
+    establishedYear: 2014,
   },
   {
     id: "co-4",
@@ -110,6 +169,11 @@ export const dummyCompanies: Company[] = [
     district: "Lilongwe",
     memberCount: 1240,
     monthlyContributionMk: 22_100_000,
+    industrySector: "Multi-employer unrestricted pool",
+    registrationNo: "CPS-POOL-SME-2019-0001",
+    payrollContactEmail: "pool.ops@cps.mw",
+    trusteeSummary: "CPS board oversight · SME segment capped exposure rules",
+    establishedYear: 2019,
   },
   {
     id: "co-5",
@@ -118,6 +182,11 @@ export const dummyCompanies: Company[] = [
     district: "Chikwawa",
     memberCount: 526,
     monthlyContributionMk: 18_650_000,
+    industrySector: "Agriculture — sugar estates & milling",
+    registrationNo: "CPS-REG-ILLOVO-2004-0098",
+    payrollContactEmail: "mw.payroll@illovo.com",
+    trusteeSummary: "Seasonal payroll peaks · harvest bonus accruals flagged to finance",
+    establishedYear: 1967,
   },
   {
     id: "co-6",
@@ -126,6 +195,11 @@ export const dummyCompanies: Company[] = [
     district: "Blantyre",
     memberCount: 389,
     monthlyContributionMk: 21_040_000,
+    industrySector: "Financial services — banking & insurance",
+    registrationNo: "CPS-REG-FDH-2010-0555",
+    payrollContactEmail: "talent@fdh.mw",
+    trusteeSummary: "Group HR policy alignment · cross-subsidiary transfers monitored",
+    establishedYear: 2008,
   },
   {
     id: "co-7",
@@ -134,6 +208,11 @@ export const dummyCompanies: Company[] = [
     district: "Lilongwe",
     memberCount: 912,
     monthlyContributionMk: 14_775_000,
+    industrySector: "Public marketing — grain & inputs",
+    registrationNo: "CPS-REG-ADMARC-2012-0770",
+    payrollContactEmail: "payroll@admarc.mw",
+    trusteeSummary: "Parastatal governance layer · RBM reporting cadence",
+    establishedYear: 1971,
   },
 ];
 
@@ -192,7 +271,7 @@ export const dummyMembers: PensionMember[] = [
     lastName: "Ngwira",
     companyId: "co-1",
     district: "Blantyre",
-    gender: "Other",
+    gender: "Female",
     dateJoined: "2018-05-06",
     balanceMk: 12_340_000,
     status: "Active",
@@ -566,6 +645,13 @@ export const dummyPwMembers: PWMember[] = [
     fundBalanceMk: 28_500_000,
     monthlyInstallmentMk: 385_000,
     nextDueDate: "2026-05-15",
+    commencementDate: "2024-08-01",
+    schemeMemberRef: "PW-ANN-2019-88421",
+    taxWithheldPct: 15,
+    cumPaidMk: 6_930_000,
+    bankMasked: "NBM · ****9021",
+    actuaryRiskBand: "Standard",
+    lastReviewDate: "2026-02-14",
   },
   {
     id: "pw-2",
@@ -576,6 +662,13 @@ export const dummyPwMembers: PWMember[] = [
     fundBalanceMk: 19_200_000,
     monthlyInstallmentMk: 298_000,
     nextDueDate: "2026-05-12",
+    commencementDate: "2023-11-15",
+    schemeMemberRef: "PW-LIFE-2020-44102",
+    taxWithheldPct: 15,
+    cumPaidMk: 4_172_000,
+    bankMasked: "FDH · ****3308",
+    actuaryRiskBand: "Low",
+    lastReviewDate: "2025-11-01",
   },
   {
     id: "pw-3",
@@ -586,6 +679,13 @@ export const dummyPwMembers: PWMember[] = [
     fundBalanceMk: 11_750_000,
     monthlyInstallmentMk: 210_000,
     nextDueDate: "2026-05-20",
+    commencementDate: "2025-01-10",
+    schemeMemberRef: "PW-FT-2025-11007",
+    taxWithheldPct: 10,
+    cumPaidMk: 1_890_000,
+    bankMasked: "Standard Bank · ****7712",
+    actuaryRiskBand: "Standard",
+    lastReviewDate: "2026-04-22",
   },
   {
     id: "pw-4",
@@ -596,6 +696,13 @@ export const dummyPwMembers: PWMember[] = [
     fundBalanceMk: 15_330_000,
     monthlyInstallmentMk: 242_000,
     nextDueDate: "2026-05-18",
+    commencementDate: "2024-03-20",
+    schemeMemberRef: "PW-ANN-2018-22019",
+    taxWithheldPct: 15,
+    cumPaidMk: 3_876_000,
+    bankMasked: "NBM · ****6644",
+    actuaryRiskBand: "Elevated",
+    lastReviewDate: "2026-01-30",
   },
   {
     id: "pw-5",
@@ -606,6 +713,13 @@ export const dummyPwMembers: PWMember[] = [
     fundBalanceMk: 33_800_000,
     monthlyInstallmentMk: 445_000,
     nextDueDate: "2026-05-11",
+    commencementDate: "2022-06-01",
+    schemeMemberRef: "PW-LIFE-2017-00901",
+    taxWithheldPct: 15,
+    cumPaidMk: 12_240_000,
+    bankMasked: "FDH · ****1188",
+    actuaryRiskBand: "Standard",
+    lastReviewDate: "2026-03-05",
   },
   {
     id: "pw-6",
@@ -616,6 +730,13 @@ export const dummyPwMembers: PWMember[] = [
     fundBalanceMk: 9_420_000,
     monthlyInstallmentMk: 175_000,
     nextDueDate: "2026-05-25",
+    commencementDate: "2025-09-01",
+    schemeMemberRef: "PW-FT-2025-22044",
+    taxWithheldPct: 10,
+    cumPaidMk: 875_000,
+    bankMasked: "NBM · ****5500",
+    actuaryRiskBand: "Low",
+    lastReviewDate: "2026-05-01",
   },
   {
     id: "pw-7",
@@ -626,6 +747,13 @@ export const dummyPwMembers: PWMember[] = [
     fundBalanceMk: 22_100_000,
     monthlyInstallmentMk: 318_000,
     nextDueDate: "2026-05-14",
+    commencementDate: "2023-05-18",
+    schemeMemberRef: "PW-ANN-2021-77190",
+    taxWithheldPct: 15,
+    cumPaidMk: 5_724_000,
+    bankMasked: "FDH · ****2093",
+    actuaryRiskBand: "Standard",
+    lastReviewDate: "2025-09-18",
   },
 ];
 
@@ -756,6 +884,195 @@ export const dummyCompliance: ComplianceFlag[] = [
   },
 ];
 
+export const dummyFinanceLiquidity: FinanceLiquidityLine[] = [
+  { label: "Operating — contributions & benefits", institution: "FDH Bank", balanceMk: 2_842_500_000, asOf: "2026-05-11" },
+  { label: "PW disbursement suspense", institution: "NBM", balanceMk: 486_200_000, asOf: "2026-05-11" },
+  { label: "Investment custody (CPS MMF)", institution: "Treasury unit trusts", balanceMk: 1_120_000_000, asOf: "2026-05-10" },
+  { label: "Statutory liquidity buffer", institution: "FDH + NBM (pooled)", balanceMk: 310_000_000, asOf: "2026-05-09" },
+  { label: "FX nostro — ZAR leg", institution: "Standard Bank SA", balanceMk: 98_400_000, asOf: "2026-05-08" },
+];
+
+export const dummyFinanceReceiptPipeline: FinancePipelineStat[] = [
+  { stage: "Draft / captured", count: 3, amountMk: 955_000 },
+  { stage: "Pending authorizer", count: 4, amountMk: 1_567_500 },
+  { stage: "Approved (posting eligible)", count: 12, amountMk: 3_812_000 },
+  { stage: "Rejected / returned", count: 1, amountMk: 165_000 },
+];
+
+export const dummyFinancePaymentPipeline: FinancePipelineStat[] = [
+  { stage: "Draft / captured", count: 1, amountMk: 2_400_000 },
+  { stage: "Pending authorizer", count: 2, amountMk: 706_000 },
+  { stage: "Approved (released)", count: 5, amountMk: 1_988_000 },
+  { stage: "Held — compliance", count: 1, amountMk: 120_000 },
+];
+
+export const dummySchemeConcentration: SchemeConcentrationRow[] = [
+  { scheme: "Press Corporation Ltd", receiptsLast90dMk: 4_320_000_000, pctOfInflows: 21 },
+  { scheme: "National Bank of Malawi", receiptsLast90dMk: 3_180_000_000, pctOfInflows: 16 },
+  { scheme: "Admarc Limited", receiptsLast90dMk: 2_910_000_000, pctOfInflows: 14 },
+  { scheme: "Individual and SME pool", receiptsLast90dMk: 2_652_000_000, pctOfInflows: 13 },
+  { scheme: "FDH Financial Holdings", receiptsLast90dMk: 2_301_000_000, pctOfInflows: 11 },
+  { scheme: "Other employers (combined)", receiptsLast90dMk: 5_001_000_000, pctOfInflows: 25 },
+];
+
+const defaultMemberProfileExtra: MemberProfileExtra = {
+  dateOfBirth: "—",
+  phone: "Not on file",
+  email: "—",
+  nationalIdMasked: "—",
+  beneficiaryName: "See master beneficiary schedule",
+  bankNameMasked: "—",
+  jobTitle: "—",
+  internalNotes: "Complete extended KYC at next contribution batch.",
+};
+
+export const memberProfileExtras: Record<string, MemberProfileExtra> = {
+  "m-101": {
+    dateOfBirth: "1978-04-12",
+    phone: "+265 888 120 441",
+    email: "t.banda.work@example.mw",
+    nationalIdMasked: "MWCHO****91L",
+    beneficiaryName: "Spouse 50%, children equal 50%",
+    bankNameMasked: "NBM · ****9021",
+    jobTitle: "Operations supervisor",
+    internalNotes: "Hard-copy statement Q4. Pensioner counselling flag if balance exceeds MK 25m.",
+  },
+  "m-102": {
+    dateOfBirth: "1985-09-03",
+    phone: "+265 991 204 882",
+    email: "wezi.moyo@example.mw",
+    nationalIdMasked: "MWLIL****44F",
+    beneficiaryName: "Mother (dependant) 40%, siblings 60%",
+    bankNameMasked: "FDH · ****3308",
+    jobTitle: "Credit analyst II",
+    internalNotes: "Mobile number verified OTP · e-statement only.",
+  },
+  "m-103": {
+    dateOfBirth: "1996-01-20",
+    phone: "+265 888 771 009",
+    email: "chisomo.phiri@example.mw",
+    nationalIdMasked: "MWSAL****02F",
+    beneficiaryName: "Estate (pending court letter)",
+    bankNameMasked: "NBM · ****4410",
+    jobTitle: "Lab technician",
+    internalNotes: "KYC ID scan pending back-office match. Hold voluntary top-up until cleared.",
+  },
+  "m-104": {
+    dateOfBirth: "1982-11-30",
+    phone: "+265 999 330 118",
+    email: "l.kumwenda@example.mw",
+    nationalIdMasked: "MWMZU****77M",
+    beneficiaryName: "Two children (minor) — guardian payout rules",
+    bankNameMasked: "FDH · ****1188",
+    jobTitle: "Driver — logistics",
+    internalNotes: "Dormant: no receipts 18 months. SMS re-activation campaign sent Mar 2026.",
+  },
+  "m-105": {
+    dateOfBirth: "1990-06-18",
+    phone: "+265 888 554 200",
+    email: "tiyamike.ngwira@example.mw",
+    nationalIdMasked: "MWBLA****33X",
+    beneficiaryName: "Spouse primary 100%",
+    bankNameMasked: "NBM · ****5500",
+    jobTitle: "HR officer",
+    internalNotes: "Maker-checker on address change completed 02 May 2026.",
+  },
+  "m-106": {
+    dateOfBirth: "2001-02-02",
+    phone: "+265 991 660 441",
+    email: "grace.chirwa@example.mw",
+    nationalIdMasked: "MWLIL****19F",
+    beneficiaryName: "Parents joint 100%",
+    bankNameMasked: "FDH · ****2093",
+    jobTitle: "Graduate trainee",
+    internalNotes: "SME pool member — quarterly pooled statement.",
+  },
+  "m-107": {
+    dateOfBirth: "1975-08-08",
+    phone: "+265 888 221 903",
+    email: "joseph.mzumara@example.mw",
+    nationalIdMasked: "MWCHI****55M",
+    beneficiaryName: "Spouse + estate trust",
+    bankNameMasked: "NBM · ****7712",
+    jobTitle: "Agricultural engineer",
+    internalNotes: "Seasonal bonus receipts flagged in finance dashboard.",
+  },
+  "m-108": {
+    dateOfBirth: "1988-12-01",
+    phone: "+265 999 441 002",
+    email: "bertha.chavula@example.mw",
+    nationalIdMasked: "MWTHY****88F",
+    beneficiaryName: "Children 100% (equal)",
+    bankNameMasked: "FDH · ****6644",
+    jobTitle: "Branch cashier",
+    internalNotes: "Proof of residence upload requested — compliance ticket C-4.",
+  },
+  "m-109": {
+    dateOfBirth: "1970-03-25",
+    phone: "+265 888 990 331",
+    email: "macdonald.mbendera@example.mw",
+    nationalIdMasked: "MWNTC****12M",
+    beneficiaryName: "Spouse 60%, daughter 40%",
+    bankNameMasked: "NBM · ****9028",
+    jobTitle: "Warehouse manager",
+    internalNotes: "High balance tier — annual actuarial note attached.",
+  },
+  "m-110": {
+    dateOfBirth: "1994-07-14",
+    phone: "+265 991 300 774",
+    email: "towera.msiska@example.mw",
+    nationalIdMasked: "MWDED****66F",
+    beneficiaryName: "Spouse 100%",
+    bankNameMasked: "FDH · ****4412",
+    jobTitle: "Loan officer",
+    internalNotes: "Linked employer NBM — payroll file auto-match enabled.",
+  },
+  "m-111": {
+    dateOfBirth: "2003-10-10",
+    phone: "+265 888 445 661",
+    email: "kondwani.chimera@example.mw",
+    nationalIdMasked: "MWBLA****04M",
+    beneficiaryName: "Parents 100%",
+    bankNameMasked: "NBM · ****3301",
+    jobTitle: "IT support",
+    internalNotes: "SME pool — first contribution 2024; onboarding pack archived.",
+  },
+  "m-112": {
+    dateOfBirth: "1986-05-22",
+    phone: "+265 999 220 889",
+    email: "esther.lungu@example.mw",
+    nationalIdMasked: "MWKAS****77F",
+    beneficiaryName: "Sister (authorised payee)",
+    bankNameMasked: "FDH · ****5509",
+    jobTitle: "Teacher",
+    internalNotes: "Dormant profile — employer last file Admarc Oct 2024.",
+  },
+  "m-113": {
+    dateOfBirth: "1992-09-09",
+    phone: "+265 888 778 120",
+    email: "bright.kachaje@example.mw",
+    nationalIdMasked: "MWLIL****21M",
+    beneficiaryName: "Spouse 50%, mother 50%",
+    bankNameMasked: "NBM · ****8821",
+    jobTitle: "Finance assistant",
+    internalNotes: "FDH group cross-hire from subsidiary — HR reference on file.",
+  },
+  "m-114": {
+    dateOfBirth: "1984-04-04",
+    phone: "+265 991 551 400",
+    email: "tamara.nyirenda@example.mw",
+    nationalIdMasked: "MWMZU****40F",
+    beneficiaryName: "Estate executor (law firm letter)",
+    bankNameMasked: "FDH · ****1199",
+    jobTitle: "Programme officer",
+    internalNotes: "Bank mandate mismatch — compliance C-6; hold outbound payments.",
+  },
+};
+
+export function memberProfileExtraFor(memberId: string): MemberProfileExtra {
+  return memberProfileExtras[memberId] ?? defaultMemberProfileExtra;
+}
+
 function startOfPeriod(period: Period): number {
   const now = new Date();
   const d = new Date(now);
@@ -790,7 +1107,7 @@ export function memberCompanyName(member: PensionMember): string {
 }
 
 export function genderBreakdown(members: PensionMember[]): { labels: string[]; values: number[] } {
-  const map: Record<string, number> = { Male: 0, Female: 0, Other: 0 };
+  const map: Record<string, number> = { Male: 0, Female: 0};
   members.forEach((m) => {
     map[m.gender] = (map[m.gender] || 0) + 1;
   });

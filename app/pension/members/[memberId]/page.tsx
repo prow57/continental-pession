@@ -4,6 +4,7 @@ import { BackLink } from "@/components/BackLink";
 import { formatMk } from "@/lib/format";
 import { getMemberById, memberCompanyName, memberLedger } from "@/lib/entities";
 import Link from "next/link";
+import { memberProfileExtraFor } from "@/data";
 
 type Props = { params: Promise<{ memberId: string }>; searchParams: Promise<{ trail?: string }> };
 
@@ -26,6 +27,7 @@ export default async function MemberDetailPage({ params, searchParams }: Props) 
 
   const ledger = memberLedger(memberId);
   const showTrail = trail === "1" || trail === "true";
+  const profile = memberProfileExtraFor(memberId);
 
   return (
     <div className="space-y-3">
@@ -37,6 +39,15 @@ export default async function MemberDetailPage({ params, searchParams }: Props) 
           </h1>
           <p className="text-xs text-slate-600">
             {member.id} · {memberCompanyName(member)} · {member.district}
+            {member.companyId ? (
+              <>
+                {" "}
+                ·{" "}
+                <Link href={`/pension/companies/${member.companyId}`} className="font-medium text-blue-800 hover:underline">
+                  Employer scheme
+                </Link>
+              </>
+            ) : null}
           </p>
         </div>
         <div className="flex gap-2">
@@ -109,20 +120,46 @@ export default async function MemberDetailPage({ params, searchParams }: Props) 
       ) : (
         <section className="cps-panel p-4">
           <h2 className="cps-panel-title mb-2">Member profile</h2>
-          <dl className="grid grid-cols-1 gap-2 text-sm sm:grid-cols-2">
+          <dl className="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
+            <div>
+              <dt className="text-[10px] font-bold uppercase text-slate-500">Date of birth</dt>
+              <dd className="font-medium text-ink">{profile.dateOfBirth}</dd>
+            </div>
+            <div>
+              <dt className="text-[10px] font-bold uppercase text-slate-500">National ID (masked)</dt>
+              <dd className="font-mono text-sm font-medium text-ink">{profile.nationalIdMasked}</dd>
+            </div>
             <div>
               <dt className="text-[10px] font-bold uppercase text-slate-500">Gender</dt>
               <dd className="font-medium text-ink">{member.gender}</dd>
             </div>
             <div>
+              <dt className="text-[10px] font-bold uppercase text-slate-500">Job title</dt>
+              <dd className="font-medium text-ink">{profile.jobTitle}</dd>
+            </div>
+            <div>
               <dt className="text-[10px] font-bold uppercase text-slate-500">Employer / pool</dt>
               <dd className="font-medium text-ink">{memberCompanyName(member)}</dd>
             </div>
+            <div>
+              <dt className="text-[10px] font-bold uppercase text-slate-500">Phone</dt>
+              <dd className="font-medium text-ink">{profile.phone}</dd>
+            </div>
             <div className="sm:col-span-2">
-              <dt className="text-[10px] font-bold uppercase text-slate-500">Notes</dt>
-              <dd className="text-slate-700">
-                Statement requests, beneficiary updates, and exit counselling notes are stored with the member record.
-              </dd>
+              <dt className="text-[10px] font-bold uppercase text-slate-500">Email</dt>
+              <dd className="break-all font-medium text-ink">{profile.email}</dd>
+            </div>
+            <div className="sm:col-span-2">
+              <dt className="text-[10px] font-bold uppercase text-slate-500">Beneficiary designation</dt>
+              <dd className="text-slate-800">{profile.beneficiaryName}</dd>
+            </div>
+            <div className="sm:col-span-2">
+              <dt className="text-[10px] font-bold uppercase text-slate-500">Pay-out bank (masked)</dt>
+              <dd className="font-mono text-sm text-ink">{profile.bankNameMasked}</dd>
+            </div>
+            <div className="sm:col-span-2">
+              <dt className="text-[10px] font-bold uppercase text-slate-500">Case notes</dt>
+              <dd className="text-slate-700">{profile.internalNotes}</dd>
             </div>
           </dl>
         </section>

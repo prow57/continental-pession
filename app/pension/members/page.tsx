@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 import React from "react";
 import Link from "next/link";
-import { dummyMembers, memberCompanyName } from "@/data";
+import { dummyMembers, memberCompanyName, memberProfileExtraFor } from "@/data";
 import { DataToolbar } from "@/components/DataToolbar";
 import { Modal } from "@/components/Modal";
 import { useToast } from "@/components/ToastProvider";
@@ -77,22 +77,29 @@ export default function PensionMembersPage() {
                   onClick={() => {
                     downloadTableCsv(
                       `member-register-${new Date().toISOString().slice(0, 10)}.csv`,
-                      members.map((m) => ({
-                        id: m.id,
-                        name: `${m.firstName} ${m.lastName}`,
-                        employer: memberCompanyName(m),
-                        district: m.district,
-                        dateJoined: m.dateJoined,
-                        kyc: m.kycComplete ? "Complete" : "Pending",
-                        status: m.status,
-                        balanceMk: m.balanceMk,
-                      })),
+                      members.map((m) => {
+                        const x = memberProfileExtraFor(m.id);
+                        return {
+                          id: m.id,
+                          name: `${m.firstName} ${m.lastName}`,
+                          employer: memberCompanyName(m),
+                          district: m.district,
+                          dateJoined: m.dateJoined,
+                          dob: x.dateOfBirth,
+                          phone: x.phone,
+                          kyc: m.kycComplete ? "Complete" : "Pending",
+                          status: m.status,
+                          balanceMk: m.balanceMk,
+                        };
+                      }),
                       [
                         { key: "id", header: "ID" },
                         { key: "name", header: "Member" },
                         { key: "employer", header: "Employer" },
                         { key: "district", header: "District" },
                         { key: "dateJoined", header: "Joined" },
+                        { key: "dob", header: "DOB" },
+                        { key: "phone", header: "Phone" },
                         { key: "kyc", header: "KYC" },
                         { key: "status", header: "Status" },
                         { key: "balanceMk", header: "Balance MK" },
@@ -116,13 +123,15 @@ export default function PensionMembersPage() {
       </div>
 
       <div className="cps-table-wrap">
-        <table className="cps-table min-w-[760px]">
+        <table className="cps-table min-w-[920px]">
           <thead>
             <tr>
               <th>Member</th>
               <th>Employer / pool</th>
               <th>District</th>
               <th>Joined</th>
+              <th>DOB</th>
+              <th>Phone</th>
               <th>KYC</th>
               <th>Status</th>
               <th className="text-right">Balance (MK)</th>
@@ -130,7 +139,9 @@ export default function PensionMembersPage() {
             </tr>
           </thead>
           <tbody>
-            {members.map((m) => (
+            {members.map((m) => {
+              const x = memberProfileExtraFor(m.id);
+              return (
               <tr key={m.id}>
                 <td>
                   <div className="font-semibold text-ink">
@@ -141,6 +152,8 @@ export default function PensionMembersPage() {
                 <td className="max-w-[220px] truncate text-slate-700">{memberCompanyName(m)}</td>
                 <td className="text-slate-700">{m.district}</td>
                 <td className="tabular-nums text-slate-700">{m.dateJoined}</td>
+                <td className="tabular-nums text-slate-700">{x.dateOfBirth}</td>
+                <td className="max-w-[140px] truncate text-[11px] text-slate-700">{x.phone}</td>
                 <td>
                   <Badge tone={m.kycComplete ? "ok" : "warn"}>{m.kycComplete ? "Complete" : "Pending"}</Badge>
                 </td>
@@ -159,7 +172,8 @@ export default function PensionMembersPage() {
                   </div>
                 </td>
               </tr>
-            ))}
+            );
+            })}
           </tbody>
         </table>
       </div>

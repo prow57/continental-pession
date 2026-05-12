@@ -23,7 +23,11 @@ export function SessionRibbon() {
   return (
     <div className="flex w-full flex-wrap items-center justify-between gap-2 border-b border-slate-800 bg-slate-900 px-3 py-1.5 text-[11px] text-slate-200">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-        <Image src="/logo.png" alt="" width={28} height={28} className="h-7 w-auto object-contain opacity-95" aria-hidden />
+        <div className="flex shrink-0 rounded-md border border-slate-200/90 bg-white p-0.5 shadow-sm ring-1 ring-black/5" aria-hidden>
+          <div className="rounded bg-slate-50 p-0.5 ring-1 ring-slate-200/80">
+            <Image src="/logo.png" alt="" width={28} height={28} className="h-6 w-auto object-contain" aria-hidden />
+          </div>
+        </div>
         <span className="font-semibold text-white">Signed in</span>
         <span>
           {SESSION.user} · {SESSION.role}

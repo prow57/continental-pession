@@ -142,10 +142,10 @@ export default function VoluntaryPage() {
         </div>
       </section>
 
-      <div className="rounded-lg border border-cps-200/80 bg-cps-50/60 p-3 text-xs leading-relaxed text-slate-800">
+      {/* <div className="rounded-lg border border-cps-200/80 bg-cps-50/60 p-3 text-xs leading-relaxed text-slate-800">
         <span className="font-bold text-cps-900">Controls:</span> booking rules, reversals, fee on earnings, and full audit trail
         are applied on every voluntary credit and booking.
-      </div>
+      </div> */}
 
       <Modal
         open={bookOpen}

@@ -6,13 +6,21 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SessionRibbon } from "@/components/SessionRibbon";
 
+/** Sidebar order: day-to-day cash first, then benefits books, oversight, then admin. */
 const navGroups: { title: string; items: { href: string; label: string }[] }[] = [
   {
     title: "Home",
     items: [{ href: "/", label: "Overview" }],
   },
   {
-    title: "Core funds",
+    title: "Cash & settlements",
+    items: [
+      { href: "/receipts", label: "Receipts" },
+      { href: "/payments", label: "Payments" },
+    ],
+  },
+  {
+    title: "Benefits & funds",
     items: [
       { href: "/pension", label: "Pension" },
       { href: "/programmed-withdrawals", label: "Withdrawals" },
@@ -20,19 +28,16 @@ const navGroups: { title: string; items: { href: string; label: string }[] }[] =
     ],
   },
   {
-    title: "Cash movement",
-    items: [
-      { href: "/receipts", label: "Receipts" },
-      { href: "/payments", label: "Payments" },
-    ],
-  },
-  {
-    title: "Control",
+    title: "Oversight",
     items: [
       { href: "/finance", label: "Finance" },
       { href: "/compliance", label: "Compliance" },
       { href: "/reports", label: "Reports" },
     ],
+  },
+  {
+    title: "Administration",
+    items: [{ href: "/settings", label: "Settings" }],
   },
 ];
 
@@ -50,18 +55,20 @@ export default function AppShell({ children }: { children: ReactNode }) {
       <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
         <aside className="flex-shrink-0 border-b border-blue-900 bg-blue-950 text-white lg:sticky lg:top-0 lg:z-20 lg:flex lg:h-[calc(100dvh-2.5rem)] lg:w-56 lg:flex-col lg:self-start lg:overflow-hidden lg:border-b-0 lg:border-r lg:border-blue-900">
           <div className="border-b border-blue-800/60 px-3 py-3 lg:shrink-0 lg:border-b-0 lg:py-4">
-            <div className="flex flex-col items-center gap-1.5 rounded-lg border border-blue-700/80 bg-blue-900/40 px-2 py-2.5">
-              <Image
-                src="/logo.png"
-                alt="Continental Holdings"
-                width={200}
-                height={120}
-                className="h-auto w-full max-w-[5.75rem] object-contain drop-shadow-sm"
-                priority
-              />
+            <div className="flex flex-col items-center gap-2 rounded-2xl border border-blue-200/90 bg-white px-3 py-3 shadow-[0_8px_24px_rgba(0,0,0,0.22)] ring-1 ring-black/5">
+              <div className="rounded-xl bg-slate-50 p-2 ring-1 ring-slate-200/80">
+                <Image
+                  src="/logo.png"
+                  alt="Continental Holdings"
+                  width={200}
+                  height={120}
+                  className="h-auto w-full max-w-[5.25rem] object-contain"
+                  priority
+                />
+              </div>
               <div className="text-center">
-                <span className="block text-[9px] font-bold uppercase tracking-[0.16em] text-sky-300/95">Pension Services</span>
-                <span className="mt-0.5 block text-[9px] leading-snug text-blue-200/85">Reserve Bank licensed · Malawi</span>
+                <span className="block text-[9px] font-bold uppercase tracking-[0.16em] text-blue-900">Pension Services</span>
+                <span className="mt-0.5 block text-[9px] leading-snug text-slate-600">Reserve Bank licensed · Malawi</span>
               </div>
             </div>
           </div>
@@ -76,7 +83,8 @@ export default function AppShell({ children }: { children: ReactNode }) {
                     const active =
                       pathname === item.href ||
                       (item.href === "/pension" && pathname.startsWith("/pension")) ||
-                      (item.href === "/finance" && pathname.startsWith("/finance"));
+                      (item.href === "/finance" && pathname.startsWith("/finance")) ||
+                      (item.href === "/settings" && pathname.startsWith("/settings"));
                     return (
                       <li key={item.href}>
                         <Link

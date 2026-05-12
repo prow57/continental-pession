@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { Bar } from "react-chartjs-2";
-import { dummyPayments, dummyReceipts } from "@/data";
+import { dummyPayments, dummyReceipts, dummyFinanceLiquidity, dummyFinanceReceiptPipeline, dummyFinancePaymentPipeline, dummySchemeConcentration } from "@/data";
 import { cpsColor, defaultOptions } from "@/components/ChartConfig";
 import { KpiCard } from "@/components/KpiCard";
 import { lastSixMonthsReceiptPaymentSeries } from "@/lib/financeMonthlySeries";
@@ -65,6 +65,110 @@ export default function FinancePage() {
         <KpiCard label="Receivables" value={api ? formatMk(api.receivablesMk) : "—"} />
         <KpiCard label="Reconciliation" value={api ? `${api.reconciledPercentage}%` : "—"} />
         <KpiCard label="Net (receipts − payments)" value={formatMk(inflow - outflow)} sub="Approved transactions" />
+      </div>
+
+      <div className="grid grid-cols-1 gap-2 lg:grid-cols-2">
+        <section className="cps-panel p-3">
+          <h2 className="cps-panel-title">Receipt authorisation pipeline</h2>
+          <p className="cps-panel-sub mb-2">Counts and MK still inside each workflow stage (demo)</p>
+          <div className="cps-table-wrap">
+            <table className="cps-table min-w-0">
+              <thead>
+                <tr>
+                  <th>Stage</th>
+                  <th className="text-right">Items</th>
+                  <th className="text-right">Amount (MK)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {dummyFinanceReceiptPipeline.map((row) => (
+                  <tr key={row.stage}>
+                    <td className="text-slate-800">{row.stage}</td>
+                    <td className="text-right tabular-nums text-slate-700">{row.count}</td>
+                    <td className="text-right font-semibold tabular-nums text-cps-950">{formatMk(row.amountMk)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+        <section className="cps-panel p-3">
+          <h2 className="cps-panel-title">Payment authorisation pipeline</h2>
+          <p className="cps-panel-sub mb-2">Benefit runs and ad-hoc settlements awaiting release</p>
+          <div className="cps-table-wrap">
+            <table className="cps-table min-w-0">
+              <thead>
+                <tr>
+                  <th>Stage</th>
+                  <th className="text-right">Items</th>
+                  <th className="text-right">Amount (MK)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {dummyFinancePaymentPipeline.map((row) => (
+                  <tr key={row.stage}>
+                    <td className="text-slate-800">{row.stage}</td>
+                    <td className="text-right tabular-nums text-slate-700">{row.count}</td>
+                    <td className="text-right font-semibold tabular-nums text-cps-950">{formatMk(row.amountMk)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <div className="grid grid-cols-1 gap-2 lg:grid-cols-2">
+        <section className="cps-panel p-3">
+          <h2 className="cps-panel-title">Liquidity and bank balances</h2>
+          <p className="cps-panel-sub mb-2">Consolidated view for trustee pack (MK, illustrative)</p>
+          <div className="cps-table-wrap">
+            <table className="cps-table min-w-[520px]">
+              <thead>
+                <tr>
+                  <th>Bucket</th>
+                  <th>Institution</th>
+                  <th className="text-right">Balance (MK)</th>
+                  <th className="text-right">As of</th>
+                </tr>
+              </thead>
+              <tbody>
+                {dummyFinanceLiquidity.map((row) => (
+                  <tr key={row.label}>
+                    <td className="font-medium text-ink">{row.label}</td>
+                    <td className="text-slate-700">{row.institution}</td>
+                    <td className="text-right font-semibold tabular-nums text-cps-950">{formatMk(row.balanceMk)}</td>
+                    <td className="text-right tabular-nums text-slate-600">{row.asOf}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+        <section className="cps-panel p-3">
+          <h2 className="cps-panel-title">Employer concentration (90d receipts)</h2>
+          <p className="cps-panel-sub mb-2">Where approved contribution inflows cluster — risk monitoring</p>
+          <div className="cps-table-wrap">
+            <table className="cps-table min-w-[400px]">
+              <thead>
+                <tr>
+                  <th>Employer / pool</th>
+                  <th className="text-right">Receipts (MK)</th>
+                  <th className="text-right">Share</th>
+                </tr>
+              </thead>
+              <tbody>
+                {dummySchemeConcentration.map((row) => (
+                  <tr key={row.scheme}>
+                    <td className="text-slate-800">{row.scheme}</td>
+                    <td className="text-right font-semibold tabular-nums text-cps-950">{formatMk(row.receiptsLast90dMk)}</td>
+                    <td className="text-right tabular-nums text-slate-700">{row.pctOfInflows}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
       </div>
 
       <div className="cps-panel p-3">

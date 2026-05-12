@@ -31,6 +31,7 @@ export default async function CompanyDetailPage({ params }: Props) {
         <h1 className="text-lg font-bold tracking-tight text-cps-950">{company.name}</h1>
         <p className="text-xs text-slate-600">
           {company.scheme === "restricted" ? "Restricted" : "Unrestricted"} scheme · {company.district}
+          {company.establishedYear ? ` · Est. ${company.establishedYear}` : null}
         </p>
       </div>
 
@@ -48,6 +49,32 @@ export default async function CompanyDetailPage({ params }: Props) {
           <div className="mt-0.5 text-xl font-bold tabular-nums text-ink">{members.length}</div>
         </div>
       </div>
+
+      <section className="cps-panel p-4">
+        <h2 className="cps-panel-title mb-2">Scheme administration</h2>
+        <dl className="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
+          <div>
+            <dt className="text-[10px] font-bold uppercase text-slate-500">Industry / segment</dt>
+            <dd className="text-slate-800">{company.industrySector ?? "—"}</dd>
+          </div>
+          <div>
+            <dt className="text-[10px] font-bold uppercase text-slate-500">CPS registration</dt>
+            <dd className="font-mono text-sm font-medium text-ink">{company.registrationNo ?? "—"}</dd>
+          </div>
+          <div>
+            <dt className="text-[10px] font-bold uppercase text-slate-500">Payroll contact</dt>
+            <dd className="break-all text-slate-800">{company.payrollContactEmail ?? "—"}</dd>
+          </div>
+          <div>
+            <dt className="text-[10px] font-bold uppercase text-slate-500">Established (employer)</dt>
+            <dd className="font-medium text-ink">{company.establishedYear ?? "—"}</dd>
+          </div>
+          <div className="sm:col-span-2">
+            <dt className="text-[10px] font-bold uppercase text-slate-500">Trustee / governance</dt>
+            <dd className="text-slate-700">{company.trusteeSummary ?? "—"}</dd>
+          </div>
+        </dl>
+      </section>
 
       <section className="cps-panel">
         <div className="cps-panel-hd">

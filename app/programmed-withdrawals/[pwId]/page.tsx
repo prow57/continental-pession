@@ -71,6 +71,7 @@ export default async function PwMemberDetailPage({ params, searchParams }: Props
           </h1>
           <p className="text-xs text-slate-600">
             {m.planType} · {m.district} · {m.id}
+            {m.schemeMemberRef ? <span className="block font-mono text-[11px] text-slate-500">{m.schemeMemberRef}</span> : null}
           </p>
         </div>
         <div className="flex gap-1.5">
@@ -95,7 +96,7 @@ export default async function PwMemberDetailPage({ params, searchParams }: Props
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
         <div className="cps-stat-tile">
           <div className="text-[10px] font-bold uppercase tracking-wide text-cps-800">Fund balance</div>
           <div className="mt-0.5 text-xl font-bold tabular-nums text-ink">{formatMk(m.fundBalanceMk)}</div>
@@ -108,6 +109,10 @@ export default async function PwMemberDetailPage({ params, searchParams }: Props
           <div className="text-[10px] font-bold uppercase tracking-wide text-cps-800">Next due</div>
           <div className="mt-0.5 text-xl font-bold tabular-nums text-ink">{formatDate(m.nextDueDate)}</div>
         </div>
+        <div className="cps-stat-tile">
+          <div className="text-[10px] font-bold uppercase tracking-wide text-cps-800">Cumulative paid</div>
+          <div className="mt-0.5 text-xl font-bold tabular-nums text-ink">{m.cumPaidMk != null ? formatMk(m.cumPaidMk) : "—"}</div>
+        </div>
       </div>
 
       {current === "overview" ? (
@@ -118,19 +123,44 @@ export default async function PwMemberDetailPage({ params, searchParams }: Props
               <p className="cps-panel-sub">Account setup and run controls</p>
             </div>
           </div>
-          <div className="grid grid-cols-1 gap-2 p-3 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-2 p-3 sm:grid-cols-2 lg:grid-cols-3">
             <div className="rounded-md border border-cps-200 bg-white p-3">
               <div className="text-[10px] font-bold uppercase tracking-wide text-slate-500">Current plan</div>
               <div className="mt-1 text-sm font-semibold text-ink">{m.planType}</div>
             </div>
             <div className="rounded-md border border-cps-200 bg-white p-3">
+              <div className="text-[10px] font-bold uppercase tracking-wide text-slate-500">Commencement</div>
+              <div className="mt-1 text-sm font-semibold text-ink">{m.commencementDate ?? "—"}</div>
+            </div>
+            <div className="rounded-md border border-cps-200 bg-white p-3">
+              <div className="text-[10px] font-bold uppercase tracking-wide text-slate-500">Scheme reference</div>
+              <div className="mt-1 font-mono text-sm font-semibold text-cps-900">{m.schemeMemberRef ?? "—"}</div>
+            </div>
+            <div className="rounded-md border border-cps-200 bg-white p-3">
+              <div className="text-[10px] font-bold uppercase tracking-wide text-slate-500">Tax withheld</div>
+              <div className="mt-1 text-sm font-semibold text-ink">{m.taxWithheldPct != null ? `${m.taxWithheldPct}%` : "—"}</div>
+            </div>
+            <div className="rounded-md border border-cps-200 bg-white p-3">
+              <div className="text-[10px] font-bold uppercase tracking-wide text-slate-500">Pay-out bank</div>
+              <div className="mt-1 font-mono text-sm font-semibold text-ink">{m.bankMasked ?? "—"}</div>
+            </div>
+            <div className="rounded-md border border-cps-200 bg-white p-3">
+              <div className="text-[10px] font-bold uppercase tracking-wide text-slate-500">Actuary risk band</div>
+              <div className="mt-1 text-sm font-semibold text-ink">{m.actuaryRiskBand ?? "—"}</div>
+            </div>
+            <div className="rounded-md border border-cps-200 bg-white p-3">
+              <div className="text-[10px] font-bold uppercase tracking-wide text-slate-500">Last review</div>
+              <div className="mt-1 text-sm font-semibold text-ink">{m.lastReviewDate ?? "—"}</div>
+            </div>
+            <div className="rounded-md border border-cps-200 bg-white p-3">
               <div className="text-[10px] font-bold uppercase tracking-wide text-slate-500">Latest run reference</div>
               <div className="mt-1 font-mono text-sm font-semibold text-cps-900">{recentRunRef}</div>
             </div>
-            <div className="rounded-md border border-cps-200 bg-cps-50/50 p-3 sm:col-span-2">
+            <div className="rounded-md border border-cps-200 bg-cps-50/50 p-3 lg:col-span-3">
               <div className="text-[10px] font-bold uppercase tracking-wide text-slate-500">Operational note</div>
               <p className="mt-1 text-sm text-slate-700">
-                Installments are prepared in the monthly pay run queue and released after maker-checker approval.
+                Installments are prepared in the monthly pay run queue and released after maker-checker approval. PAYE is withheld at
+                the registered rate before bank file generation.
               </p>
             </div>
           </div>
