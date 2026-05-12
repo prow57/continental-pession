@@ -14,13 +14,12 @@ export async function POST(request: Request) {
     body = {};
   }
 
-  const username = (body.username ?? "").trim();
+  const username = (body.username ?? "").trim() || "Demo";
   const password = (body.password ?? "").trim();
   const from = (body.from ?? "/").trim();
 
-  if (!username || !password) {
-    return NextResponse.json({ status: 0, message: "Username and password are required." }, { status: 400 });
-  }
+  /* Demo build: no credential validation */
+  void password;
 
   const target = from.startsWith("/") ? from : "/";
   const response = NextResponse.json({ status: 1, target });

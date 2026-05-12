@@ -4,6 +4,11 @@ import { NextResponse } from "next/server";
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  /** Always allow API routes — otherwise login POST is redirected to HTML and cookies never set */
+  if (pathname.startsWith("/api")) {
+    return NextResponse.next();
+  }
+
   if (pathname === "/login") {
     const hasSession = !!request.cookies.get("cps_session")?.value;
     if (hasSession) {
